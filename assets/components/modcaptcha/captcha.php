@@ -21,3 +21,5 @@ $captcha->SetCharSet($chars);
 $captcha->SetNumChars($modx->getOption('modcaptcha.num_chars', null, 5));
 $captcha->SetNumLines($modx->getOption('modcaptcha.num_lines', null, 2));
 $captcha->Create();
+
+@session_write_close();
