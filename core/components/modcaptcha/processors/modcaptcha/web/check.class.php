@@ -18,29 +18,30 @@ class modModcaptchaWebCheckProcessor extends modprocessor{
     }
     
     public function process(){
-        $key = $this->getProperty('captcha_key');
-        $code = $this->getProperty('code');
-        $session_code = $_SESSION[$key];
+        $key = $this->getProperty('captcha_key'); 
+        
+        if(!$code = $this->getProperty('code')){
+            return $this->failure("Code is empty", array(
+                "code"  => 2,
+            )); 
+        }
+        
+        $session_code = (!empty($_SESSION[$key]) ? $_SESSION[$key] : '');
         
         if(!$case_sensitive = $this->getProperty('case_sensitive')){
             $code = strtolower($code);
             $session_code = strtolower($session_code);
         }
-        
-        if($code){
-            if($code == $session_code){
-                return $this->success('');
-            }
-            else{
-                return $this->failure("Wrong code", array(
-                    "code"  => 1,
-                ));
-            }
+         
+        if($code != $session_code){
+            return $this->failure("Wrong code", array(
+                "code"  => 1,
+            ));
         }
+        
         // else
-        return $this->failure("Code is empty", array(
-            "code"  => 2,
-        ));
+        return $this->success('');
+        
     }
 }
 
